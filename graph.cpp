@@ -9,16 +9,22 @@ Graph::Graph(const std::string& jsonPath)
 {
     std::ifstream f(jsonPath);
 
-
     nlohmann::json data = nlohmann::json::parse(f);
 
     start_ = {data["start"]["x"], data["start"]["y"]};
     finish_ = {data["finish"]["x"], data["finish"]["y"]};
 
     intermediateVertices_.reserve(data["nodes"].size());
+    unsafeZones_.reserve(data["nodes"].size());
     for(const auto& node : data["nodes"]){
-        intermediateVertices_.push_back({node["x"], node["y"], node["is_safe"]});
+        if(node["is_safe"]){
+            intermediateVertices_.push_back({node["x"], node["y"]});
+        }
+        else{
+            unsafeZones_.push_back({node["x"], node["y"]});
+        }
     }
+
     f.close();
 }
 
