@@ -4,23 +4,38 @@
 #include <string>
 #include <vector>
 
-class Graph
+#include <QObject>
+#include <QPointF>
+
+class Graph : public QObject
 {
-private:
+    Q_OBJECT
+//    Q_PROPERTY(Vertex start READ getStart CONSTANT)
+//    Q_PROPERTY(Vertex finish READ getFinish CONSTANT)
+
+public:
+    Graph(const std::string& jsonPath, QObject* parent = nullptr);
+
     struct Vertex {
         double x;
         double y;
     };
 
-    Vertex start_;
-    Vertex finish_;
+    double calcDistance(const Vertex& left, const Vertex& right);
+
+    Q_INVOKABLE int size() const;
+    Q_INVOKABLE QPointF getStart() const;
+    Q_INVOKABLE QPointF getFinish() const;
+
+signals:
+    void dataLoaded();
+private:
+    void loadFromFile(const std::string& jsonPath);
+
+    QPointF start_;
+    QPointF finish_;
     std::vector<Vertex> intermediateVertices_;
     std::vector<Vertex> unsafeZones_;
-
-public:
-    Graph(const std::string& jsonPath);
-
-    double calcDistance(const Vertex& left, const Vertex& right);
 };
 
 #endif // GRAPH_H
