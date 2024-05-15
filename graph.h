@@ -6,6 +6,7 @@
 
 #include <QObject>
 #include <QPointF>
+#include <QVector>
 
 class Graph : public QObject
 {
@@ -26,6 +27,8 @@ public:
     Q_INVOKABLE int size() const;
     Q_INVOKABLE QPointF getStart() const;
     Q_INVOKABLE QPointF getFinish() const;
+    Q_INVOKABLE QVector<QPointF> getIntermediateVertices() const;
+    Q_INVOKABLE QVector<QPointF> getUnsafeZones() const;
 
 signals:
     void dataLoaded();
@@ -34,8 +37,9 @@ private:
 
     QPointF start_;
     QPointF finish_;
-    std::vector<Vertex> intermediateVertices_;
-    std::vector<Vertex> unsafeZones_;
+    QVector<QPointF> intermediateVertices_;
+    QVector<QPointF> unsafeZones_;
+
 };
 
 #endif // GRAPH_H

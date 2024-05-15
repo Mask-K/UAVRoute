@@ -53,5 +53,13 @@ QPointF Graph::getFinish() const{
     return finish_;
 }
 
+QVector<QPointF> Graph::getIntermediateVertices() const{
+    return intermediateVertices_;
+}
+
+QVector<QPointF> Graph::getUnsafeZones() const{
+    return unsafeZones_;
+}
+
 
 
