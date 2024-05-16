@@ -19,6 +19,16 @@ int main(int argc, char *argv[])
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed,
         &app, []() { QCoreApplication::exit(-1); },
         Qt::QueuedConnection);
+
+    auto matrix = gr->adjacencyMatrix();
+
+    for(int i = 0; i < matrix.size(); ++i){
+        for(int j = 0; j < matrix[i].size(); ++j){
+            std::cout << matrix[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
+
     engine.load(url);
 
     return app.exec();

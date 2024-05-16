@@ -11,29 +11,24 @@
 class Graph : public QObject
 {
     Q_OBJECT
-//    Q_PROPERTY(Vertex start READ getStart CONSTANT)
-//    Q_PROPERTY(Vertex finish READ getFinish CONSTANT)
 
 public:
     Graph(const std::string& jsonPath, QObject* parent = nullptr);
 
-    struct Vertex {
-        double x;
-        double y;
-    };
-
-    double calcDistance(const Vertex& left, const Vertex& right);
-
-    Q_INVOKABLE int size() const;
     Q_INVOKABLE QPointF getStart() const;
     Q_INVOKABLE QPointF getFinish() const;
     Q_INVOKABLE QVector<QPointF> getIntermediateVertices() const;
     Q_INVOKABLE QVector<QPointF> getUnsafeZones() const;
 
+    QVector<QVector<double>> adjacencyMatrix() const;
+
 signals:
     void dataLoaded();
 private:
     void loadFromFile(const std::string& jsonPath);
+    int size() const;
+    bool isPointOnSegment(const QPointF& p, const QPointF& a, const QPointF& b) const;
+    double calcDistance(const QPointF& left, const QPointF& right) const;
 
     QPointF start_;
     QPointF finish_;

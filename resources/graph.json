@@ -6,7 +6,8 @@
         {"x": 6, "y": 2, "is_safe": true},
         {"x": 4, "y": 6, "is_safe": true},
         {"x": 4, "y": 2, "is_safe": false},
-        {"x": 7, "y": 7, "is_safe": true}
+        {"x": 7, "y": 7, "is_safe": true},
+        {"x": 6, "y": 4, "is_safe": false}
     ]
 }
 
