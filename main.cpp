@@ -4,10 +4,11 @@
 
 #include <graph.h>
 #include <antcolonyoptimization.h>
+#include <artificialbeecolony.h>
 #include <iostream>
 
 
-QVector<QVector<double>> generateLargeAdjacencyMatrix(int numVertices, double density = 0.6, double maxWeight = 10.0) {
+QVector<QVector<double>> generateLargeAdjacencyMatrix(int numVertices, double density = 0.5, double maxWeight = 10.0) {
 
     QVector<QVector<double>> adjacencyMatrix(numVertices, QVector<double>(numVertices, std::numeric_limits<double>::infinity()));
 
@@ -53,8 +54,8 @@ int main(int argc, char *argv[])
         &app, []() { QCoreApplication::exit(-1); },
         Qt::QueuedConnection);
 
-    auto matrix = gr->adjacencyMatrix();
-    //auto matrix = generateLargeAdjacencyMatrix(100);
+    //auto matrix = gr->adjacencyMatrix();
+    auto matrix = generateLargeAdjacencyMatrix(100);
     for(int i = 0; i < matrix.size(); ++i){
         for(int j = 0; j < matrix[i].size(); ++j){
             std::cout << matrix[i][j] << " ";
@@ -69,11 +70,12 @@ int main(int argc, char *argv[])
     qDebug() << "Найкращий маршрут:" << bestPath;
     qDebug() << "Довжина найкращого маршруту:" << aco.calculateRouteLength(bestPath);
 
-    double test = std::numeric_limits<double>::infinity();
-
-    qDebug() << test;
-    test +=test;
-    qDebug() << test;
+    ArtificialBeeColony abc(matrix, 50);
+    auto bestPath2 = abc.findBestPath();
+    double bestLength = abc.getBestLength();
+    qDebug() << "Бджолиний алгоритм";
+    qDebug() << "Найкращий маршрут:" << bestPath2;
+    qDebug() << "Довжина найкращого маршруту:" << bestLength;
 
     engine.load(url);
 

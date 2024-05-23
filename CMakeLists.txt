@@ -26,6 +26,7 @@ qt_add_qml_module(appUAVRoute
     SOURCES graph.h graph.cpp
     SOURCES
     SOURCES antcolonyoptimization.h antcolonyoptimization.cpp
+    SOURCES artificialbeecolony.h artificialbeecolony.cpp
 
 )
 
