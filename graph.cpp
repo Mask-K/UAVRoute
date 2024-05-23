@@ -85,7 +85,6 @@ QVector<QVector<double>> Graph::adjacencyMatrix() const{
                         break;
                     }
                 }
-
                 if(safe){
                     matrix[i][j] = matrix[j][i] = calcDistance(left, right);
                 }

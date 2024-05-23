@@ -25,6 +25,7 @@ qt_add_qml_module(appUAVRoute
     QML_FILES resources/graph.json
     SOURCES graph.h graph.cpp
     SOURCES
+    SOURCES antcolonyoptimization.h antcolonyoptimization.cpp
 
 )
 
