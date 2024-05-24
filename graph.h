@@ -22,6 +22,8 @@ public:
 
     QVector<QVector<double>> adjacencyMatrix() const;
 
+    Q_INVOKABLE QPointF getVertex(int index) const;
+
 signals:
     void dataLoaded();
 private:

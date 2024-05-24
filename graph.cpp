@@ -114,5 +114,21 @@ bool Graph::isPointOnSegment(const QPointF& p, const QPointF& a, const QPointF& 
     return true;
 }
 
+QPointF Graph::getVertex(int index) const{
+    if (index < 0 || index >= size()) {
+        throw std::out_of_range("Index out of range");
+    }
+    if(index == 0){
+        return start_;
+    }
+    if(index == size() - 1){
+        return finish_;
+    }
+    if(index <= unsafeZones_.size()){
+        return unsafeZones_[index - 1];
+    }
+
+    return intermediateVertices_[index - unsafeZones_.size() - 1];
+}
 
 

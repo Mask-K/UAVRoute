@@ -5,6 +5,7 @@
 #include <graph.h>
 #include <antcolonyoptimization.h>
 #include <artificialbeecolony.h>
+#include <algorithmresults.h>
 #include <iostream>
 
 
@@ -49,13 +50,10 @@ int main(int argc, char *argv[])
     Graph* gr = new Graph("graph.json");
     engine.rootContext()->setContextProperty("graph", gr);
 
-    const QUrl url(u"qrc:/UAVRoute/Main.qml"_qs);
-    QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed,
-        &app, []() { QCoreApplication::exit(-1); },
-        Qt::QueuedConnection);
 
-    //auto matrix = gr->adjacencyMatrix();
-    auto matrix = generateLargeAdjacencyMatrix(100);
+
+    auto matrix = gr->adjacencyMatrix();
+    //auto matrix = generateLargeAdjacencyMatrix(100);
     for(int i = 0; i < matrix.size(); ++i){
         for(int j = 0; j < matrix[i].size(); ++j){
             std::cout << matrix[i][j] << " ";
@@ -77,6 +75,16 @@ int main(int argc, char *argv[])
     qDebug() << "Найкращий маршрут:" << bestPath2;
     qDebug() << "Довжина найкращого маршруту:" << bestLength;
 
+    AlgorithmResults* algoResults = new AlgorithmResults();
+    algoResults->setBestPath(bestPath);
+    algoResults->setBestLength(aco.calculateRouteLength(bestPath));
+    engine.rootContext()->setContextProperty("algorithmResults", algoResults);
+
+
+    const QUrl url(u"qrc:/UAVRoute/Main.qml"_qs);
+    QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed,
+        &app, []() { QCoreApplication::exit(-1); },
+        Qt::QueuedConnection);
     engine.load(url);
 
     return app.exec();

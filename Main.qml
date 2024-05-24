@@ -66,9 +66,25 @@ ApplicationWindow {
                 ctx.arc(scaleX(point.x), scaleY(point.y), 1, 0, 2 * Math.PI);
                 ctx.stroke();
             }
+
+            ctx.strokeStyle = "orange";
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            var path = algorithmResults.bestPath;
+            if (path.length > 0) {
+                var first = graph.getVertex(path[0]);
+                ctx.moveTo(scaleX(first.x), scaleY(first.y));
+                for (var i = 1; i < path.length; ++i) {
+                    var point = graph.getVertex(path[i]);
+                    ctx.lineTo(scaleX(point.x), scaleY(point.y));
+                }
+                ctx.stroke();
+            }
+            ctx.fillStyle = "white";
+                        ctx.font = "14px Arial";
+                        ctx.fillText("Best Length: " + algorithmResults.bestLength, 10, 20);
         }
     }
-
     Component.onCompleted: {
         canvas.requestPaint();
     }
