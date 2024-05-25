@@ -10,32 +10,21 @@ class AlgorithmResults : public QObject
     Q_PROPERTY(double bestLength READ bestLength WRITE setBestLength NOTIFY bestLengthChanged)
 
 public:
-    explicit AlgorithmResults(QObject *parent = nullptr)
-        : QObject(parent), m_bestLength(0.0) {}
+    AlgorithmResults(QObject *parent = nullptr);
 
-    QVector<int> bestPath() const { return m_bestPath; }
-    void setBestPath(const QVector<int> &path) {
-        if (m_bestPath != path) {
-            m_bestPath = path;
-            emit bestPathChanged();
-        }
-    }
+    QVector<int> bestPath() const;
+    void setBestPath(const QVector<int> &path);
 
-    double bestLength() const { return m_bestLength; }
-    void setBestLength(double length) {
-        if (m_bestLength != length) {
-            m_bestLength = length;
-            emit bestLengthChanged();
-        }
-    }
+    double bestLength() const;
+    void setBestLength(double length);
 
 signals:
     void bestPathChanged();
     void bestLengthChanged();
 
 private:
-    QVector<int> m_bestPath;
-    double m_bestLength;
+    QVector<int> bestPath_;
+    double bestLength_;
 };
 
 #endif // ALGORITHMRESULTS_H
