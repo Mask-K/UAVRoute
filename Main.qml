@@ -18,6 +18,12 @@ ApplicationWindow {
 
         function scaleX(x) { return (x - xMin) / (xMax - xMin) * width; }
         function scaleY(y) { return height - (y - yMin) / (yMax - yMin) * height; }
+        function scaleRadius(r) {
+            var scaleXFactor = width / (xMax - xMin);
+            var scaleYFactor = height / (yMax - yMin);
+            var scaleFactor = (scaleXFactor + scaleYFactor) / 2;
+            return r * scaleFactor;
+        }
 
         onPaint: {
             var ctx = getContext("2d");
@@ -35,27 +41,46 @@ ApplicationWindow {
             var start = graph.getStart();
             var finish = graph.getFinish();
 
+
             ctx.strokeStyle = "green";
             ctx.lineWidth = 5;
             ctx.beginPath();
-            ctx.arc(scaleX(start.x), scaleY(start.y), 1, 0, 2 * Math.PI);
+            ctx.arc(scaleX(start.x), scaleY(start.y), 5, 0, 2 * Math.PI);
             ctx.stroke();
+
 
             ctx.strokeStyle = "purple";
             ctx.lineWidth = 5;
             ctx.beginPath();
-            ctx.arc(scaleX(finish.x), scaleY(finish.y), 1, 0, 2 * Math.PI);
+            ctx.arc(scaleX(finish.x), scaleY(finish.y), 5, 0, 2 * Math.PI);
             ctx.stroke();
 
+            // Draw unsafe zones
             ctx.strokeStyle = "red";
             ctx.lineWidth = 3;
             var unsafeZones = graph.getUnsafeZones();
+            var radiuses = graph.getUnsafeZonesRadiuses();
             for (var i = 0; i < unsafeZones.length; i++) {
                 var point = unsafeZones[i];
+                var radius = radiuses[i];
+
+                var scaledRadius = scaleRadius(radius);
+                if (radius === 0) {
+                    scaledRadius = 1;
+                }
+                console.log("Drawing circle at: ", point.x, point.y, "with radius:", scaledRadius);
+
                 ctx.beginPath();
-                ctx.arc(scaleX(point.x), scaleY(point.y), 1, 0, 2 * Math.PI);
+                ctx.arc(scaleX(point.x), scaleY(point.y), scaledRadius, 0, 2 * Math.PI);
                 ctx.stroke();
+
+
+                ctx.beginPath();
+                ctx.arc(scaleX(point.x), scaleY(point.y), 2, 0, 2 * Math.PI);
+                ctx.fillStyle = 'red';
+                ctx.fill();
             }
+
 
             ctx.strokeStyle = "blue";
             ctx.lineWidth = 3;
@@ -63,9 +88,10 @@ ApplicationWindow {
             for (var i = 0; i < intermediateVertices.length; i++) {
                 var point = intermediateVertices[i];
                 ctx.beginPath();
-                ctx.arc(scaleX(point.x), scaleY(point.y), 1, 0, 2 * Math.PI);
+                ctx.arc(scaleX(point.x), scaleY(point.y), 3, 0, 2 * Math.PI);
                 ctx.stroke();
             }
+
 
             ctx.strokeStyle = "orange";
             ctx.lineWidth = 2;
@@ -80,9 +106,11 @@ ApplicationWindow {
                 }
                 ctx.stroke();
             }
+
+
             ctx.fillStyle = "white";
-                        ctx.font = "14px Arial";
-                        ctx.fillText("Best Length: " + algorithmResults.bestLength, 10, 20);
+            ctx.font = "14px Arial";
+            ctx.fillText("Best Length: " + algorithmResults.bestLength, 10, 20);
         }
     }
     Component.onCompleted: {

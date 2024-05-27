@@ -31,12 +31,12 @@ void Graph::loadFromFile(const std::string& jsonPath){
     intermediateVertices_.reserve(data["nodes"].size());
     unsafeZones_.reserve(data["nodes"].size());
     for(const auto& node : data["nodes"]){
-        if(node["is_safe"]){
-            intermediateVertices_.push_back({node["x"], node["y"]});
-        }
-        else{
-            unsafeZones_.push_back({node["x"], node["y"]});
-        }
+        intermediateVertices_.push_back({node["x"], node["y"]});
+    }
+
+    for(const auto& node: data["unsafeZones"]){
+        unsafeZones_.push_back({node["x"], node["y"]});
+        unsafeZonesRadiuses_.push_back(node["radius"]);
     }
 
     f.close();
@@ -79,12 +79,14 @@ QVector<QVector<double>> Graph::adjacencyMatrix() const{
                 QPointF right = (j == n - 1) ? finish_ : intermediateVertices_[j - 1 - unsafeSize];
 
                 bool safe = true;
-                for(const auto& p : unsafeZones_){
-                    if(isPointOnSegment(p, left, right)){
+
+                for(int l = 0; l < unsafeZones_.size(); ++l){
+                    if(isSegmentIntersectingCircle(left, right, unsafeZones_[l], unsafeZonesRadiuses_[l])){
                         safe = false;
                         break;
                     }
                 }
+
                 if(safe){
                     matrix[i][j] = matrix[j][i] = calcDistance(left, right);
                 }
@@ -131,4 +133,34 @@ QPointF Graph::getVertex(int index) const{
     return intermediateVertices_[index - unsafeZones_.size() - 1];
 }
 
+bool Graph::isSegmentIntersectingCircle(const QPointF& p1, const QPointF& p2, const QPointF& center, double radius) const {
+    double dx = p2.x() - p1.x();
+    double dy = p2.y() - p1.y();
+    double fx = p1.x() - center.x();
+    double fy = p1.y() - center.y();
+
+    double a = dx * dx + dy * dy;
+    double b = 2 * (fx * dx + fy * dy);
+    double c = (fx * fx + fy * fy) - radius * radius;
+
+    double discriminant = b * b - 4 * a * c;
+
+    if (discriminant >= 0) {
+        discriminant = std::sqrt(discriminant);
+
+        double t1 = (-b - discriminant) / (2 * a);
+        double t2 = (-b + discriminant) / (2 * a);
+
+        if ((t1 >= 0 && t1 <= 1) || (t2 >= 0 && t2 <= 1)) {
+            return true;
+        }
+    }
+
+
+    double dist1 = std::sqrt(fx * fx + fy * fy);
+    double dist2 = std::sqrt((p2.x() - center.x()) * (p2.x() - center.x()) + (p2.y() - center.y()) * (p2.y() - center.y()));
+
+    return dist1 <= radius && dist2 <= radius;
+
+}
 
