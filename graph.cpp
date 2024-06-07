@@ -60,7 +60,7 @@ QVector<QPointF> Graph::getUnsafeZones() const{
     return unsafeZones_;
 }
 
-QVector<QVector<double>> Graph::adjacencyMatrix() const{
+QVector<QVector<double>> Graph::distanceMatrix() const{
     int n = size();
     int unsafeSize = unsafeZones_.size();
 
@@ -97,24 +97,6 @@ QVector<QVector<double>> Graph::adjacencyMatrix() const{
     return matrix;
 }
 
-bool Graph::isPointOnSegment(const QPointF& p, const QPointF& a, const QPointF& b) const{
-    // A margin of error to account for floating-point constraints
-    const double epsilon = 1e-9;
-
-    double crossProduct = (a.x() - b.x()) * (p.y() - b.y()) - (p.x() - b.x()) * (a.y() - b.y());
-    if (std::abs(crossProduct) > epsilon) {
-        return false;
-    }
-
-    if (p.x() < std::min(a.x(), b.x()) - epsilon || p.x() > std::max(a.x(), b.x()) + epsilon) {
-        return false;
-    }
-    if (p.y() < std::min(a.y(), b.y()) - epsilon || p.y() > std::max(a.y(), b.y()) + epsilon) {
-        return false;
-    }
-
-    return true;
-}
 
 QPointF Graph::getVertex(int index) const{
     if (index < 0 || index >= size()) {
@@ -162,5 +144,9 @@ bool Graph::isSegmentIntersectingCircle(const QPointF& p1, const QPointF& p2, co
 
     return dist1 <= radius && dist2 <= radius;
 
+}
+
+QVector<double> Graph::getUnsafeZonesRadiuses() const{
+    return    unsafeZonesRadiuses_;
 }
 

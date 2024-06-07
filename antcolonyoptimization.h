@@ -9,10 +9,10 @@
 class AntColonyOptimization {
 public:
     AntColonyOptimization(const QVector<QVector<double>>& adjacencyMatrix,
-                          int numAnts = 50,
+                          int numAnts = 20,
                           int numIterations = 500,
                           double alpha = 1.0,
-                          double beta = 2.0,
+                          double beta = 1.0,
                           double evaporationRate = 0.5,
                           double pheromoneConstant = 1.0);
     QVector<int> findBestPath();

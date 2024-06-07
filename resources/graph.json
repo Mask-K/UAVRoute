@@ -1,4 +1,4 @@
-{ 
+{
     "start": {"x": 0, "y": 0},
     "finish": {"x": 6, "y": 6},
     "nodes": [
@@ -9,8 +9,7 @@
     ],
     "unsafeZones": [
         {"x": 2, "y": 2, "radius": 0},
-        {"x": 4, "y": 2, "radius": 3},
+        {"x": 4, "y": 2, "radius": 0},
         {"x": 6, "y": 4, "radius": 0}
     ]
 }
-

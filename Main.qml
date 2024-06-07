@@ -57,7 +57,7 @@ ApplicationWindow {
 
             // Draw unsafe zones
             ctx.strokeStyle = "red";
-            ctx.lineWidth = 3;
+            ctx.lineWidth = 1;
             var unsafeZones = graph.getUnsafeZones();
             var radiuses = graph.getUnsafeZonesRadiuses();
             for (var i = 0; i < unsafeZones.length; i++) {
@@ -68,7 +68,7 @@ ApplicationWindow {
                 if (radius === 0) {
                     scaledRadius = 1;
                 }
-                console.log("Drawing circle at: ", point.x, point.y, "with radius:", scaledRadius);
+
 
                 ctx.beginPath();
                 ctx.arc(scaleX(point.x), scaleY(point.y), scaledRadius, 0, 2 * Math.PI);
